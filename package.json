@@ -1,0 +1,12 @@
+{
+  "name": "rent-nest-rental-properties-with-ease",
+  "version": "1.0.0",
+  "description": "rent nest",
+  "license": "ISC",
+  "author": "Md Khalid Hossain",
+  "type": "module",
+  "main": "server.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
