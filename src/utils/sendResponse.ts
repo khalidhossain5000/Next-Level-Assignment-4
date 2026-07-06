@@ -14,7 +14,7 @@ interface IData<T> {
 }
 
 const sendResponse = async <T>(res: Response, data: IData<T>) => {
-  res.send(data.statusCode).json({
+  res.status(data.statusCode).json({
     success: data.success,
     message: data.message,
     data: data.data,
