@@ -55,6 +55,25 @@ res.cookie("refreshToken",refreshToken,{
 })
 
 
+//get me 
+
+const getMe=catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
+   const id=req.user?.id as string
+    const result=await authServices.getCurrentUserFromDb(id)
+      sendResponse(res, {
+      statusCode: httpStatus.CREATED,
+      success: true,
+      message: "User Login Successfull",
+      data: result,
+    });
+})
+
+
+
+
+
+
+
 
 //validating refreshtoken and generating accesstoken
 
@@ -77,5 +96,7 @@ const refreshUserToken=catchAsync(async(req:Request,res:Response)=>{
 
 export const authController = {
   registerUser,
-  loginUser
+  loginUser,
+  refreshUserToken,
+  getMe
 };
