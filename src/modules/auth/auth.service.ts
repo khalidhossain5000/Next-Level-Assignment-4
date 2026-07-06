@@ -3,8 +3,9 @@ import { prisma } from "../../lib/prisma";
 import { IUser } from "./auth.interface";
 import httpStatus from "http-status";
 import configuration from "../../config";
-import jwt, { SignOptions } from "jsonwebtoken"
+import jwt, { JwtPayload, SignOptions } from "jsonwebtoken"
 import { jwtUtils } from "../../utils/jwtUtils";
+import { UserStatus } from "../../../generated/prisma/enums";
 const createUserInDb = async (payload: IUser) => {
   const { firstName, lastName, email, password, status, role } = payload;
 
@@ -79,9 +80,45 @@ return {accessToken,refreshToken}
 
 }
 
+//refresh token
+
+const refreshToken=async(token:string)=>{
+//decode refresh token and match validate info
+const verifiedToken=jwtUtils.verifyToken(token,configuration.jwt_refresh_access_secret)
+if(!verifiedToken.success) throw new Error(verifiedToken?.error)
+const {name,id,email,role}=verifiedToken.data as JwtPayload
+
+const user=await prisma.user.findUniqueOrThrow({
+    where:{
+        id,
+        email
+    }
+})
+
+if(!user) throw new Error("User is not exist please register first")
+
+if(user.status===UserStatus.BAN) throw new Error("User is banned ")
+
+const jwtPayload={
+    name,
+    id,
+    email,
+    role
+}
+
+const accessToken=jwtUtils.createToken(jwtPayload,configuration.jwt_access_secret,configuration.jwt_access_expires_in as SignOptions)
+
+
+
+return accessToken
+
+
+}
+
 
 export const authServices = {
   createUserInDb,
-  loginUserInDb
+  loginUserInDb,
+  refreshToken
   
 };

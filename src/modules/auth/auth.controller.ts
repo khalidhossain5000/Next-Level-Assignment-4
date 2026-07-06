@@ -53,6 +53,28 @@ res.cookie("refreshToken",refreshToken,{
     });
 
 })
+
+
+
+//validating refreshtoken and generating accesstoken
+
+const refreshUserToken=catchAsync(async(req:Request,res:Response)=>{
+    const refreshToken=req.cookies.refreshToken
+    const accessToken=await authServices.refreshToken(refreshToken)
+    res.cookie("accessToken",accessToken,{
+        httpOnly:true,
+        sameSite:"none",
+        secure:false,
+        maxAge:1000 * 60 *60 *24 *1.5
+    })
+    sendResponse(res,{
+        statusCode:httpStatus.CREATED,
+        success:true,
+        message:"Token refresh successfully and new token given",
+        data:accessToken
+    })
+})
+
 export const authController = {
   registerUser,
   loginUser
