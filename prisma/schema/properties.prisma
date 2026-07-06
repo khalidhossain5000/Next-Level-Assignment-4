@@ -1,0 +1,19 @@
+model Properties{
+    id String @id @default(uuid())
+    title String @db.VarChar(300)
+    description String @db.Text
+    location String @db.VarChar(100)
+    price Decimal @db.Decimal(10,2)
+    amenities String @db.Text
+    status PropertyStatus @default(AVAILABLE)
+    //cateogiry id relation to category table storing property category
+    categoryId String
+    category Categories @relation(fields: [categoryId] ,references: [id]) 
+
+    //relatio with user storing landlord id
+    landLordId String
+    user User @relation(fields: [landLordId],references: [id],onDelete: Cascade)
+
+        created_At DateTime @default(now())
+    updated_At DateTime @updatedAt
+}
