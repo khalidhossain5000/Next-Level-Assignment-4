@@ -5,7 +5,8 @@ path:path.join(process.cwd(),'.env')
 })
 
 const configuration={
-port:process.env.PORT
+port:process.env.PORT,
+database_url:process.env.DATABASE_URL
 }
 
 export default configuration
