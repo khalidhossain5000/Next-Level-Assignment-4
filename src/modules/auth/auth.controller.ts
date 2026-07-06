@@ -8,7 +8,7 @@ const registerUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const payload = req.body;
     const result = await authServices.createUserInDb(payload);
-console.log(result,'create result')
+
     sendResponse(res, {
       statusCode: httpStatus.CREATED,
       success: true,
