@@ -26,6 +26,25 @@ const registerUser = catchAsync(
 const loginUser=catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
 const {email,password}=req.body;
 const result=await authServices.loginUserInDb(email,password)
+
+const {accessToken , refreshToken}  = result
+//store token in cookie 
+
+res.cookie("accessToken",accessToken,{
+    httpOnly:true,
+    sameSite:"none",
+    secure:false,
+    maxAge:1000 * 60 *60 *24 *10
+})
+
+res.cookie("refreshToken",refreshToken,{
+    httpOnly:true,
+    sameSite:"none",
+    secure:false,
+    maxAge:1000 * 60 *60 *24 *1
+})
+
+
   sendResponse(res, {
       statusCode: httpStatus.CREATED,
       success: true,

@@ -69,11 +69,12 @@ const jwtPayload={
     status:user.status
 }
 
-
+//access tokena and refresh token
 
 const accessToken=jwtUtils.createToken(jwtPayload,configuration.jwt_access_secret,configuration.jwt_access_expires_in as SignOptions)
 
-return {accessToken}
+const refreshToken=jwtUtils.createToken(jwtPayload,configuration.jwt_refresh_access_secret,configuration.jwt_refresh_expires_in as SignOptions)
+return {accessToken,refreshToken}
 
 
 }
