@@ -1,6 +1,6 @@
 model Categories {
     id String @id @default(uuid())
-    name String @db.VarChar(200)
+    name String @db.VarChar(200) @unique
     //realtion with property
     properties Properties[]
     created_At DateTime @default(now())
