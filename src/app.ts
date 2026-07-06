@@ -6,6 +6,7 @@ import { authRoutes } from "./modules/auth/auth.route";
 import { notFound } from "./middleware/notFound";
 import { globalErrorHandler } from "./middleware/globalErrorHandler";
 import { categoriesRoutes } from "./modules/categories/categories.route";
+import { propertyRoutes } from "./modules/properties/properties.route";
 
 const app: Application = express();
 //cors setup
@@ -34,6 +35,8 @@ app.use("/api/auth", authRoutes);
 //categories realated routes
 app.use("/api/categories",categoriesRoutes)
 
+//properties related routes
+app.use("/api/landlord",propertyRoutes)
 app.use(notFound)
 app.use(globalErrorHandler)
 export default app;
