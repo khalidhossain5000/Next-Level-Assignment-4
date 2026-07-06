@@ -3,6 +3,6 @@ model Categories {
     name String @db.VarChar(200)
     //realtion with property
     properties Properties[]
-        created_At DateTime @default(now())
+    created_At DateTime @default(now())
     updated_At DateTime @updatedAt
 }
