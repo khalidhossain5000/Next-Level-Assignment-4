@@ -18,12 +18,14 @@ const getAllUsers=catchAsync(async(req:Request,res:Response,next:NextFunction)=>
 
 //update user status
 const updateUserStatus=catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
-   
+   const status=req.body.status
+   const userId=req.params?.id
+   const result=await adminServices.updateUserStatus(status,userId as string)
     sendResponse(res, {
       statusCode: httpStatus.CREATED,
       success: true,
       message: "All Rental Request For Your Properteis retirved successfull",
-      data: null,
+      data: result,
     });
 
 })
