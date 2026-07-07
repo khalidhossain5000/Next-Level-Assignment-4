@@ -19,6 +19,22 @@ const createProperties=catchAsync(async(req:Request,res:Response,next:NextFuncti
 
 })
 
+//update properties
+const updateProperties=catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
+
+    const payload=req.body
+    const categoryId=req.body.categoryId
+    const landLordId=req.user?.id
+    const result=await propertiesServices.createPropertiesInDb(payload,landLordId as string,categoryId)
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Propery Updated Successfully",
+      data: result,
+    });
+
+})
 export const propertyController={
-    createProperties
+    createProperties,
+    updateProperties
 }

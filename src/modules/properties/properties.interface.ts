@@ -11,3 +11,11 @@ export interface IProperties{
     status:PropertyStatus;
 
 }
+
+export interface IUpdateProperty{
+    title?:string;
+    description?:string;
+    location?:string;
+    price?:number;
+    amenities?:string;
+}

@@ -1,13 +1,10 @@
 import { prisma } from "../../lib/prisma"
-import { IProperties } from "./properties.interface"
-
-
-
+import { IProperties, IUpdateProperty } from "./properties.interface"
 
 
 
 const createPropertiesInDb=async(payload:IProperties,landLordId:string,categoryId:string)=>{
-    console.log(categoryId,'this is cat id here', typeof(categoryId),payload,'this is payload')
+   
 const result=await prisma.properties.create({
     data:{
         ...payload,
@@ -18,6 +15,13 @@ const result=await prisma.properties.create({
 return result
 }
 
+//update property
+const updatePropertyInDb=async(payload:IUpdateProperty,propertyId:string)=>{
+
+}
+
+
 export const propertiesServices={
-createPropertiesInDb
+createPropertiesInDb,
+updatePropertyInDb
 }
