@@ -19,12 +19,13 @@ const getAllPropertiesWithFilter = catchAsync(
   },
 );
 
-//get property details 
-const getPropertyDetails=catchAsync(
+//get property details
+const getPropertyDetails = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-   
-const id=req.params.id
-    const result = await propertiesServices.getSinglePropertyFromDb(id as string);
+    const id = req.params.id;
+    const result = await propertiesServices.getSinglePropertyFromDb(
+      id as string,
+    );
 
     sendResponse(res, {
       statusCode: httpStatus.OK,
@@ -35,8 +36,7 @@ const id=req.params.id
   },
 );
 
-
 export const propertiesController = {
   getAllPropertiesWithFilter,
-  getPropertyDetails
+  getPropertyDetails,
 };

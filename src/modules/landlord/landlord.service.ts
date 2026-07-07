@@ -15,7 +15,27 @@ const result=await prisma.properties.create({
 return result
 }
 
+//get all rental request for landlord management
+const getAllRentalRequestFromDb=async(landLordId:string,isLandLord:boolean)=>{
 
+    if(!isLandLord) throw {statusCode:409 ,message:"Unauth access you dont have permission for this"}
+    const result=await prisma.rentalRequest.findMany({
+        where:{
+            property:{
+                landLordId
+            }
+        },
+        include:{
+            property:true,
+            tenant:{
+                omit:{
+                    password:true
+                }
+            }
+        }
+    })
+    return result
+}
 
 //update property
 const updatePropertyInDb=async(payload:IUpdateProperty,propertyId:string ,landLordId:string ,isLandlord:boolean)=>{
@@ -64,5 +84,6 @@ return result
 export const propertiesServices={
 createPropertiesInDb,
 updatePropertyInDb,
-deletePropertyInDb
+deletePropertyInDb,
+getAllRentalRequestFromDb
 }

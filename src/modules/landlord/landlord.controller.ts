@@ -20,6 +20,24 @@ const createProperties=catchAsync(async(req:Request,res:Response,next:NextFuncti
 
 })
 
+//get all rental request for landlord
+const getAllRentalRequest=catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
+
+  const landLordId=req.user?.id
+const role=req.user?.role
+
+const isLandLord=role===Role.LANDLORD
+console.log(isLandLord,'islandlord')
+    const result=await propertiesServices.getAllRentalRequestFromDb(landLordId as string,isLandLord)
+    sendResponse(res, {
+      statusCode: httpStatus.CREATED,
+      success: true,
+      message: "All Rental Request For Your Properteis retirved successfull",
+      data: result,
+    });
+
+})
+
 //update properties
 const updateProperties=catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
 
@@ -65,5 +83,6 @@ const deleteProperty=catchAsync(async(req:Request,res:Response,next:NextFunction
 export const propertyController={
     createProperties,
     updateProperties,
-    deleteProperty
+    deleteProperty,
+    getAllRentalRequest
 }
