@@ -9,7 +9,7 @@ router.post("/properties",auth(Role.LANDLORD),propertyController.createPropertie
 //get all rental request for landlord manageemnt
 router.get("/properties/requests",auth(Role.LANDLORD),propertyController.getAllRentalRequest)
 //update rental request accpet or reject
-router.patch("/properties/requests/:id",auth(Role.LANDLORD),propertyController.getAllRentalRequest)
+router.patch("/properties/requests/:id",auth(Role.LANDLORD),propertyController.updateRentalReqStatus)
 
 //update property by landlord
 router.put("/properties/:id",auth(Role.LANDLORD),propertyController.updateProperties)

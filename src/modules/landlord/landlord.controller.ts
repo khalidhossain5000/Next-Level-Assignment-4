@@ -40,12 +40,10 @@ const isLandLord=role===Role.LANDLORD
 //update rental req status accpet or reject
 const updateRentalReqStatus=catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
 
-  const landLordId=req.user?.id
-const role=req.user?.role
+  const reqId=req.params.id
+const {status}=req.body
 
-const isLandLord=role===Role.LANDLORD
-
-    const result=await propertiesServices.getAllRentalRequestFromDb(landLordId as string,isLandLord)
+    const result=await propertiesServices.updateRentalReqStatusInDb(reqId as string,status)
     sendResponse(res, {
       statusCode: httpStatus.CREATED,
       success: true,
@@ -100,5 +98,6 @@ export const propertyController={
     createProperties,
     updateProperties,
     deleteProperty,
-    getAllRentalRequest
+    getAllRentalRequest,
+    updateRentalReqStatus
 }

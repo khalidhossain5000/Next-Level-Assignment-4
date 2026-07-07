@@ -1,3 +1,4 @@
+import { RentalRequestStatus } from "../../../generated/prisma/enums"
 import { prisma } from "../../lib/prisma"
 import { IProperties, IUpdateProperty } from "./landlord.interface"
 
@@ -64,7 +65,28 @@ return updateResult
 
 
 }
+//update status by llandlord
+const updateRentalReqStatusInDb=async(reqId:string,status:RentalRequestStatus)=>{
+    console.log(status)
+const rentReq=await prisma.rentalRequest.findUniqueOrThrow({
+    where:{id:reqId}
+})
 
+const result=await prisma.rentalRequest.update({
+    where:{id:rentReq.id},
+    data:{
+        status
+    }
+})
+
+
+return result
+
+
+
+
+
+}
 //delete property
 const deletePropertyInDb=async(id:string,landLordId:string)=>{
 
@@ -85,5 +107,6 @@ export const propertiesServices={
 createPropertiesInDb,
 updatePropertyInDb,
 deletePropertyInDb,
-getAllRentalRequestFromDb
+getAllRentalRequestFromDb,
+updateRentalReqStatusInDb
 }
