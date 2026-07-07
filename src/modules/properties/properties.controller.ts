@@ -3,6 +3,7 @@ import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import httpStatus from "http-status"
 import { propertiesServices } from "./properties.service";
+import { Role } from "../../../generated/prisma/enums";
 
 const createProperties=catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
 
@@ -23,9 +24,10 @@ const createProperties=catchAsync(async(req:Request,res:Response,next:NextFuncti
 const updateProperties=catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
 
     const payload=req.body
-    const categoryId=req.body.categoryId
+    const propertyId=req.params.id
     const landLordId=req.user?.id
-    const result=await propertiesServices.createPropertiesInDb(payload,landLordId as string,categoryId)
+    const isLandlord=req.user?.id === Role.LANDLORD
+    const result=await propertiesServices.updatePropertyInDb(payload,propertyId as string , landLordId as string,isLandlord)
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,

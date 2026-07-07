@@ -16,7 +16,30 @@ return result
 }
 
 //update property
-const updatePropertyInDb=async(payload:IUpdateProperty,propertyId:string)=>{
+const updatePropertyInDb=async(payload:IUpdateProperty,propertyId:string ,landLordId:string ,isLandlord:boolean)=>{
+const property=await prisma.properties.findUniqueOrThrow({where:{id:propertyId}})
+
+if(!isLandlord && property.landLordId!==landLordId)  throw {statusCode:401 , message:"Your dont have permission to update"}
+
+
+
+const updateResult=await prisma.properties.update({
+    where:{id:propertyId},
+    data:{
+        ...payload
+    },
+    include:{
+        user:{
+            omit:{
+                password:true
+            }
+        },
+        category:true
+    }
+})
+return updateResult
+
+
 
 }
 
