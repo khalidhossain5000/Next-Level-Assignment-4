@@ -8,6 +8,7 @@ import { globalErrorHandler } from "./middleware/globalErrorHandler";
 import { categoriesRoutes } from "./modules/categories/categories.route";
 import { landLordRoutes } from "./modules/landlord/landlord.route";
 import { propertyRoutes } from "./modules/properties/properties.route";
+import { rentalRequestRoutes } from "./modules/rentalRequest/rentalRequest.route";
 
 const app: Application = express();
 //cors setup
@@ -42,7 +43,8 @@ app.use("/api/properties",propertyRoutes)
 //properties landlord related routes
 app.use("/api/landlord",landLordRoutes)
 
-
+//rental requst reatled api
+app.use("/api/rentals",rentalRequestRoutes)
 
 
 
