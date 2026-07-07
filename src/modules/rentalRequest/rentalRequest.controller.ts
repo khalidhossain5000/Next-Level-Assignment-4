@@ -4,45 +4,51 @@ import { rentalRequestServices } from "./rentalRequest.service";
 import httpStatus from "http-status";
 import sendResponse from "../../utils/sendResponse";
 
-const createRentalRequest=catchAsync(
+const createRentalRequest = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-   
-    const payload=req.body
-    const tenantId=req.user?.id
+    const payload = req.body;
+    const tenantId = req.user?.id;
 
-    const result = await rentalRequestServices.createRentalRequestInDb(payload,tenantId as string)
+    const result = await rentalRequestServices.createRentalRequestInDb(
+      payload,
+      tenantId as string,
+    );
 
     sendResponse(res, {
       statusCode: httpStatus.CREATED,
       success: true,
       message: "Rental Request Created Successfully",
-      data: result
+      data: result,
     });
   },
 );
 
 // get current logged in user rental requst
-const getCurrentUsersRentalRequest=catchAsync(
+const getCurrentUsersRentalRequest = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const tenantId=req.user?.id
+    const tenantId = req.user?.id;
 
-    const result = await rentalRequestServices.getCurrentUserAllRentalRequestFromDb(tenantId as string)
+    const result =
+      await rentalRequestServices.getCurrentUserAllRentalRequestFromDb(
+        tenantId as string,
+      );
 
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
       message: "Yours all rental request retrived successfully",
-      data: result
+      data: result,
     });
   },
 );
 
 //get rental request details
-const getRentalRequestDetails=catchAsync(
+const getRentalRequestDetails = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-   
-const id=req.params?.id
-    const result = await rentalRequestServices.getRentalRequestDetailsFromDb(id as string)
+    const id = req.params?.id;
+    const result = await rentalRequestServices.getRentalRequestDetailsFromDb(
+      id as string,
+    );
 
     sendResponse(res, {
       statusCode: httpStatus.OK,
@@ -52,8 +58,9 @@ const id=req.params?.id
     });
   },
 );
-export const rentalRequestController={
+
+export const rentalRequestController = {
   createRentalRequest,
   getCurrentUsersRentalRequest,
-  getRentalRequestDetails
-}
+  getRentalRequestDetails,
+};
