@@ -2,10 +2,7 @@ import { Router } from "express";
 import auth from "../../middleware/auth.middleware";
 import { Role } from "../../../generated/prisma/enums";
 import { adminController } from "./admin.controller";
-// GET	/api/admin/users	Get all users
-// PATCH	/api/admin/users/:id	Update user status (ban/unban)
-// GET	/api/admin/properties	Get all properties
-// GET	/api/admin/rentals	Get all rental requests
+
 const router=Router()
 //get all users for admin manage
 router.get("/users",auth(Role.ADMIN),adminController.getAllUsers)
