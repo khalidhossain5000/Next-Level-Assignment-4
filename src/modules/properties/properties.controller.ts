@@ -26,7 +26,7 @@ const updateProperties=catchAsync(async(req:Request,res:Response,next:NextFuncti
     const payload=req.body
     const propertyId=req.params.id
     const landLordId=req.user?.id
-    const isLandlord=req.user?.id === Role.LANDLORD
+    const isLandlord=req.user?.role === Role.LANDLORD
     const result=await propertiesServices.updatePropertyInDb(payload,propertyId as string , landLordId as string,isLandlord)
     sendResponse(res, {
       statusCode: httpStatus.OK,
@@ -36,7 +36,34 @@ const updateProperties=catchAsync(async(req:Request,res:Response,next:NextFuncti
     });
 
 })
+
+//delete property
+
+
+const deleteProperty=catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
+
+    const propertyId=req.params.id
+    const landLordId=req.user?.id
+   
+    const result=await propertiesServices.deletePropertyInDb(propertyId as string,landLordId as string)
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Propery Deleted Successfully",
+      data: result,
+    });
+
+})
+
+
+
+
+
+
+
+
 export const propertyController={
     createProperties,
-    updateProperties
+    updateProperties,
+    deleteProperty
 }
