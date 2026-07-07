@@ -6,4 +6,6 @@ import { categoriesController } from "./categories.controller";
 const router=Router()
 //admin can create categories
 router.post("/",auth(Role.ADMIN),categoriesController.createCategories)
+//get all categories public api
+router.get("/",categoriesController.getAllCategories)
 export const categoriesRoutes=router
