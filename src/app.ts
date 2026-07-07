@@ -10,6 +10,7 @@ import { landLordRoutes } from "./modules/landlord/landlord.route";
 import { propertyRoutes } from "./modules/properties/properties.route";
 import { rentalRequestRoutes } from "./modules/rentalRequest/rentalRequest.route";
 import { adminRoutes } from "./modules/admin/admin.route";
+import {  reviewsRoutes } from "./modules/reviews/reviews.route";
 
 const app: Application = express();
 //cors setup
@@ -50,6 +51,8 @@ app.use("/api/rentals",rentalRequestRoutes)
 //admin routes
 app.use("/api/admin",adminRoutes)
 
+//reviews realted
+app.use("/api/reviews",reviewsRoutes)
 
 
 
