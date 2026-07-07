@@ -6,6 +6,7 @@ import { authRoutes } from "./modules/auth/auth.route";
 import { notFound } from "./middleware/notFound";
 import { globalErrorHandler } from "./middleware/globalErrorHandler";
 import { categoriesRoutes } from "./modules/categories/categories.route";
+import { landLordRoutes } from "./modules/landlord/landlord.route";
 import { propertyRoutes } from "./modules/properties/properties.route";
 
 const app: Application = express();
@@ -35,8 +36,19 @@ app.use("/api/auth", authRoutes);
 //categories realated routes
 app.use("/api/categories",categoriesRoutes)
 
-//properties related routes
-app.use("/api/landlord",propertyRoutes)
+//property realted api for public get and other api
+app.use("/api/properties",propertyRoutes)
+
+//properties landlord related routes
+app.use("/api/landlord",landLordRoutes)
+
+
+
+
+
+
+
+
 app.use(notFound)
 app.use(globalErrorHandler)
 export default app;

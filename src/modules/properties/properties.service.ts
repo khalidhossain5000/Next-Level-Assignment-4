@@ -1,66 +1,100 @@
-import { prisma } from "../../lib/prisma"
-import { IProperties, IUpdateProperty } from "./properties.interface"
+import { PropertiesWhereInput } from "../../../generated/prisma/models";
+import { prisma } from "../../lib/prisma";
+import { IPropertyQuery } from "./properties.interface";
 
+const getAllPropertiesFromDb = async (query: IPropertyQuery) => {
+    console.log(query,'this is query')
+  let andConditions: PropertiesWhereInput[] = [];
 
+  //searching logic
 
-const createPropertiesInDb=async(payload:IProperties,landLordId:string,categoryId:string)=>{
-   
-const result=await prisma.properties.create({
-    data:{
-        ...payload,
-        landLordId,
-        categoryId
-    }
-})
-return result
-}
-
-//update property
-const updatePropertyInDb=async(payload:IUpdateProperty,propertyId:string ,landLordId:string ,isLandlord:boolean)=>{
-const property=await prisma.properties.findUniqueOrThrow({where:{id:propertyId}})
-
-if(!isLandlord && property.landLordId!==landLordId)  throw {statusCode:401 , message:"Your dont have permission to update" }
-
-
-
-const updateResult=await prisma.properties.update({
-    where:{id:propertyId},
-    data:{
-        ...payload
-    },
-    include:{
-        user:{
-            omit:{
-                password:true
-            }
+  if (query.searchTerm) {
+    andConditions.push({
+      OR: [
+        //search by location
+        {
+          location: {
+            contains: query.searchTerm,
+            mode: "insensitive",
+          },
         },
-        category:true
+        //search by amenities
+        {
+          amenities: {
+            contains: query.searchTerm,
+            mode: "insensitive",
+          },
+        },
+        //search by property type(category)
+        {
+          category: {
+            name: {
+              contains: query.searchTerm,
+              mode: "insensitive",
+            },
+          },
+        },
+        //serach by price range will check later
+      ],
+    });
+  }
+
+  //filter logic
+  //filter by location
+  if (query.location) {
+    andConditions.push({
+      location: {
+        contains: query.location as string,
+        mode: "insensitive",
+      },
+    });
+  }
+//filter by type (category)
+
+if(query.type){
+    andConditions.push({
+        category:{
+            name:{
+                equals:query.type,
+                mode:"insensitive"
+            }
+        }
+    })
+}
+
+
+//filter by price range
+if(query.minPrice || query.maxPrice){
+    const priceCondition:{
+        gte?:number;
+        lte?:number;
+    }={}
+
+    if(query.minPrice){
+        priceCondition.gte=Number(query.minPrice)
     }
-})
-return updateResult
-
-
-
+    if(query.maxPrice){
+        priceCondition.lte=Number(query.maxPrice)
+    }
+    andConditions.push({price:priceCondition})
 }
+  const propertiesResult = await prisma.properties.findMany({
+    where: {
+      AND: andConditions,
+    },
 
-//delete property
-const deletePropertyInDb=async(id:string,landLordId:string)=>{
+    include: {
+      category: true,
+      user: {
+        omit: {
+          password: true,
+        },
+      },
+    },
+  });
+  return propertiesResult;
+};
 
-const property=await prisma.properties.findUniqueOrThrow({
-    where:{id}
-})
-
-if(property.landLordId!==landLordId) throw {statusCode:401,message:"You dont have permission"}
-
-
-const result=await prisma.properties.delete({
-    where:{id}
-})
-return result
-}
-
-export const propertiesServices={
-createPropertiesInDb,
-updatePropertyInDb,
-deletePropertyInDb
-}
+export const propertiesServices = {
+  getAllPropertiesFromDb,
+};

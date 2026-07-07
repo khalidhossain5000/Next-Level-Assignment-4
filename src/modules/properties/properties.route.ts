@@ -1,13 +1,7 @@
 import { Router } from "express";
-import { propertyController } from "./properties.controller";
-import auth from "../../middleware/auth.middleware";
-import { Role } from "../../../generated/prisma/enums";
+import { propertiesController } from "./properties.controller";
 
 const router=Router()
-//create properteis by landlord
-router.post("/properties",auth(Role.LANDLORD),propertyController.createProperties)
-//update property by landlord
-router.put("/properties/:id",auth(Role.LANDLORD),propertyController.updateProperties)
-//delete property by landlord
-router.delete("/properties/:id",auth(Role.LANDLORD),propertyController.deleteProperty)
+//get public all properties with filter
+router.get("/",propertiesController.getAllPropertiesWithFilter)
 export const propertyRoutes=router

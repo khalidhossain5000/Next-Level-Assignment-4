@@ -1,21 +1,9 @@
-import { PropertyStatus } from "../../../generated/prisma/enums";
+import { PropertiesWhereInput } from "../../../generated/prisma/models";
 
-
-
-export interface IProperties{
-    title:string;
-    description:string;
-    location:string;
-    price:number;
-    amenities:string;
-    status:PropertyStatus;
-
-}
-
-export interface IUpdateProperty{
-    title?:string;
-    description?:string;
-    location?:string;
-    price?:number;
-    amenities?:string;
+export interface IPropertyQuery extends PropertiesWhereInput{
+    
+    type?:string;
+    minPrice?:string;
+    maxPrice?:string;
+    searchTerm?:string;
 }

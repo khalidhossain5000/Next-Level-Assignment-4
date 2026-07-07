@@ -1,0 +1,69 @@
+import { NextFunction, Request, Response } from "express";
+import catchAsync from "../../utils/catchAsync";
+import sendResponse from "../../utils/sendResponse";
+import httpStatus from "http-status"
+import { propertiesServices } from "./landlord.service";
+import { Role } from "../../../generated/prisma/enums";
+
+const createProperties=catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
+
+    const payload=req.body
+    const categoryId=req.body.categoryId
+    const landLordId=req.user?.id
+    const result=await propertiesServices.createPropertiesInDb(payload,landLordId as string,categoryId)
+    sendResponse(res, {
+      statusCode: httpStatus.CREATED,
+      success: true,
+      message: "Properties Created Successfully",
+      data: result,
+    });
+
+})
+
+//update properties
+const updateProperties=catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
+
+    const payload=req.body
+    const propertyId=req.params.id
+    const landLordId=req.user?.id
+    const isLandlord=req.user?.role === Role.LANDLORD
+    const result=await propertiesServices.updatePropertyInDb(payload,propertyId as string , landLordId as string,isLandlord)
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Propery Updated Successfully",
+      data: result,
+    });
+
+})
+
+//delete property
+
+
+const deleteProperty=catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
+
+    const propertyId=req.params.id
+    const landLordId=req.user?.id
+   
+    const result=await propertiesServices.deletePropertyInDb(propertyId as string,landLordId as string)
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "Propery Deleted Successfully",
+      data: result,
+    });
+
+})
+
+
+
+
+
+
+
+
+export const propertyController={
+    createProperties,
+    updateProperties,
+    deleteProperty
+}
