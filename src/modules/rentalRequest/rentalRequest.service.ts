@@ -60,7 +60,22 @@ return result
 };
 
 //get rental request details
-const getRentalRequestDetailsFromDb = async (requestId: string) => {};
+const getRentalRequestDetailsFromDb = async (requestId: string) => {
+    const result=await prisma.rentalRequest.findUniqueOrThrow({
+        where:{
+            id:requestId
+        },
+        include:{
+            property:true,
+            tenant:{
+                omit:{
+                    password:true
+                }
+            }
+        }
+    })
+    return result
+};
 
 export const rentalRequestServices = {
   createRentalRequestInDb,

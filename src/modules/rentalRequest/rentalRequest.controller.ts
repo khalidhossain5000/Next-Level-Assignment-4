@@ -41,14 +41,14 @@ const getCurrentUsersRentalRequest=catchAsync(
 const getRentalRequestDetails=catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
    
-
-    // const result = await rentalRequestServices.getRentalRequestDetailsFromDb()
+const id=req.params?.id
+    const result = await rentalRequestServices.getRentalRequestDetailsFromDb(id as string)
 
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
       message: "Rental Request Details Retrived Successfull",
-      data: null,
+      data: result,
     });
   },
 );
