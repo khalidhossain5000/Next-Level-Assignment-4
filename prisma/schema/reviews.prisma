@@ -1,0 +1,14 @@
+model Reviews{
+    id String @id @default(uuid())
+    rating Int  @default(0)
+    content String @db.VarChar(250)
+    //property id relation finding out kon property er jono review
+    propertyId String
+    property Properties @relation(fields: [propertyId],references: [id],onDelete: Cascade)
+
+    //tenant id
+    tenantId String
+    tenant User @relation(fields: [tenantId],references: [id],onDelete: Cascade)
+    created_At DateTime @default(now())
+    updated_At DateTime @updatedAt
+}

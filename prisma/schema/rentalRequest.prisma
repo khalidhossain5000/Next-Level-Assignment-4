@@ -9,4 +9,6 @@ model RentalRequest {
     //relatuin with user to store which user done the request
     tenantId String
     tenant User @relation(fields: [tenantId] , references: [id] ,onDelete: Cascade)
+          created_At DateTime @default(now())
+    updated_At DateTime @updatedAt
 }

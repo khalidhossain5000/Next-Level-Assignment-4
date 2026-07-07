@@ -15,6 +15,8 @@ model Properties{
     user User @relation(fields: [landLordId],references: [id],onDelete: Cascade)
     //realtion with rental request
     rentalRequest RentalRequest[]
+    //relation with reviews
+    reviews Reviews[]
     created_At DateTime @default(now())
     updated_At DateTime @updatedAt
 }
