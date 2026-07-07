@@ -1,0 +1,12 @@
+model RentalRequest {
+    id String @id @default(uuid())
+    status RentalRequestStatus @default(PENDING)
+    totalAmount Decimal
+    //foregin key property id to stored kon property er jonno request kora hoiche
+    propertyId String
+    property Properties @relation(fields: [propertyId] , references: [id] ,onDelete: Cascade)
+
+    //relatuin with user to store which user done the request
+    tenantId String
+    tenant User @relation(fields: [tenantId] , references: [id] ,onDelete: Cascade)
+}

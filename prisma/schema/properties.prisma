@@ -13,7 +13,8 @@ model Properties{
     //relatio with user storing landlord id
     landLordId String
     user User @relation(fields: [landLordId],references: [id],onDelete: Cascade)
-
-        created_At DateTime @default(now())
+    //realtion with rental request
+    rentalRequest RentalRequest[]
+    created_At DateTime @default(now())
     updated_At DateTime @updatedAt
 }

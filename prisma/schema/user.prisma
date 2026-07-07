@@ -9,6 +9,8 @@ model User {
 
     //relation with property
     properties Properties[]
+    //relation with rental request
+    rentalRequest RentalRequest[]
         created_At DateTime @default(now())
     updated_At DateTime @updatedAt
 }

@@ -14,3 +14,11 @@ enum PropertyStatus {
     AVAILABLE 
     BOOKED  
 }
+
+enum RentalRequestStatus {
+    PENDING
+    APPROVED
+    REJECTED
+    ACTIVE
+    COMPLETED
+}
