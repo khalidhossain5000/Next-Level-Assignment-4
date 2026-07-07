@@ -11,7 +11,7 @@ return result
 const updateUserStatus=async(status:UserStatus,userId:string)=>{
 //s-1 check user exist
 const user=await prisma.user.findUniqueOrThrow({where:{id:userId}})
-console.log(user,'this is the user',userId)
+
 //s-2 if user role is admin then this user cant be ban
 if(user.role===Role.ADMIN) throw{status:401,message:"Unauth you cant ban or update status of admin"}
 //s-3 update status
@@ -27,13 +27,34 @@ return result
 }
 
 // get all properties for admin manage
-const getAllPropertiesFromDb=()=>{
-
+const getAllPropertiesFromDb=async()=>{
+const result=await prisma.properties.findMany({
+    include:{
+        category:true,
+        user:{
+            omit:{
+                password:true
+            }
+        },
+        rentalRequest:true
+    }
+})
+return result
 }
 
 //get all rental request for admin manage
-const getAllRentalRequestFromDb=()=>{
-
+const getAllRentalRequestFromDb=async()=>{
+const result=await prisma.rentalRequest.findMany({
+    include:{
+        property:true,
+        tenant:{
+            omit:{
+                password:true
+            }
+        }
+    }
+})
+return result
 }
 export const adminServices={
     getAllUsersFromDb,

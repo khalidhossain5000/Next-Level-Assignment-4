@@ -32,24 +32,24 @@ const updateUserStatus=catchAsync(async(req:Request,res:Response,next:NextFuncti
 
 //get all properties for admin manage
 const getAllProperties=catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
-   
+   const result=await adminServices.getAllPropertiesFromDb()
     sendResponse(res, {
       statusCode: httpStatus.CREATED,
       success: true,
       message: "All Rental Request For Your Properteis retirved successfull",
-      data: null,
+      data: result,
     });
 
 })
 
 //get all rental request from db for admin manager
 const getAllRentalRequest=catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
-   
+   const result=await adminServices.getAllRentalRequestFromDb()
     sendResponse(res, {
       statusCode: httpStatus.CREATED,
       success: true,
       message: "All Rental Request For Your Properteis retirved successfull",
-      data: null,
+      data: result,
     });
 
 })
