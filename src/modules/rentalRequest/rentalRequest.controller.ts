@@ -24,15 +24,15 @@ const createRentalRequest=catchAsync(
 // get current logged in user rental requst
 const getCurrentUsersRentalRequest=catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-   
+    const tenantId=req.user?.id
 
-    // const result = await rentalRequestServices.getCurrentUserAllRentalRequestFromDb()
+    const result = await rentalRequestServices.getCurrentUserAllRentalRequestFromDb(tenantId as string)
 
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
       message: "Yours all rental request retrived successfully",
-      data: null
+      data: result
     });
   },
 );
