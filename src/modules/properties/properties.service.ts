@@ -3,7 +3,7 @@ import { prisma } from "../../lib/prisma";
 import { IPropertyQuery } from "./properties.interface";
 
 const getAllPropertiesFromDb = async (query: IPropertyQuery) => {
-    console.log(query,'this is query')
+ 
   let andConditions: PropertiesWhereInput[] = [];
 
   //searching logic
@@ -95,6 +95,22 @@ if(query.minPrice || query.maxPrice){
   return propertiesResult;
 };
 
+
+//get property details 
+const getSinglePropertyFromDb=async(id:string)=>{
+const result=await prisma.properties.findUniqueOrThrow({
+  where:{id},
+  include:{
+    category:true,
+    user:{
+      omit:{password:true}
+    }
+  }
+})
+return result
+}
+
 export const propertiesServices = {
   getAllPropertiesFromDb,
+  getSinglePropertyFromDb
 };
