@@ -1,5 +1,3 @@
-
-
 import { NextFunction, Request, Response } from "express";
 import catchAsync from "../../utils/catchAsync";
 import { rentalRequestServices } from "./rentalRequest.service";
@@ -9,14 +7,16 @@ import sendResponse from "../../utils/sendResponse";
 const createRentalRequest=catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
    
+    const payload=req.body
+    const tenantId=req.user?.id
 
-    // const result = await rentalRequestServices.createRentalRequestInDb()
+    const result = await rentalRequestServices.createRentalRequestInDb(payload,tenantId as string)
 
     sendResponse(res, {
       statusCode: httpStatus.CREATED,
       success: true,
       message: "Rental Request Created Successfully",
-      data: null
+      data: result
     });
   },
 );

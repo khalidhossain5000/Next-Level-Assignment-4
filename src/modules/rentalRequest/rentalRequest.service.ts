@@ -1,8 +1,37 @@
+import { RentalRequestStatus } from "../../../generated/prisma/enums"
+import { prisma } from "../../lib/prisma"
+import { IRentalRequest } from "./rentalRequest.interface"
 
 
 
-const createRentalRequestInDb=async(payload:any,tentantId:string)=>{
-
+const createRentalRequestInDb=async(payload:IRentalRequest,tenantId:string)=>{
+const {totalAmount,propertyId} = payload
+const existingRentalRequestForThisTenant=await prisma.rentalRequest.findFirst({
+    where:{
+        tenantId,
+        propertyId,
+         status:{
+        in:[RentalRequestStatus.PENDING,RentalRequestStatus.APPROVED]
+    }
+    }
+})
+if(existingRentalRequestForThisTenant) throw {statusCode:409 , message:"You already requested for this property wait for landlord response"}
+const result=await prisma.rentalRequest.create({
+    data:{
+        totalAmount,
+        propertyId,
+        tenantId
+    },
+    include:{
+        property:true,
+        tenant:{
+            omit:{
+                password:true
+            }
+        }
+    }
+})
+return result
 }
 
 //get current login user rental request
