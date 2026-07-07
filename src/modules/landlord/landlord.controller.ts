@@ -27,7 +27,7 @@ const getAllRentalRequest=catchAsync(async(req:Request,res:Response,next:NextFun
 const role=req.user?.role
 
 const isLandLord=role===Role.LANDLORD
-console.log(isLandLord,'islandlord')
+
     const result=await propertiesServices.getAllRentalRequestFromDb(landLordId as string,isLandLord)
     sendResponse(res, {
       statusCode: httpStatus.CREATED,
@@ -37,7 +37,23 @@ console.log(isLandLord,'islandlord')
     });
 
 })
+//update rental req status accpet or reject
+const updateRentalReqStatus=catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
 
+  const landLordId=req.user?.id
+const role=req.user?.role
+
+const isLandLord=role===Role.LANDLORD
+
+    const result=await propertiesServices.getAllRentalRequestFromDb(landLordId as string,isLandLord)
+    sendResponse(res, {
+      statusCode: httpStatus.CREATED,
+      success: true,
+      message: "All Rental Request For Your Properteis retirved successfull",
+      data: result,
+    });
+
+})
 //update properties
 const updateProperties=catchAsync(async(req:Request,res:Response,next:NextFunction)=>{
 
