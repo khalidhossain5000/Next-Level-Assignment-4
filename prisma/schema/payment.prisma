@@ -4,6 +4,7 @@ model Payment{
     totalAmount Decimal @db.Decimal(10,2)
     provider String @db.VarChar(50)
     paidAt DateTime @default(now())
+    status PaymentStatus @default(PENDING)
     //rental request foreign key to know which request payment is doing
     rentalRequestId String
     rentalRequest RentalRequest @relation(fields: [rentalRequestId],references: [id],onDelete: Cascade)

@@ -11,6 +11,7 @@ import { propertyRoutes } from "./modules/properties/properties.route";
 import { rentalRequestRoutes } from "./modules/rentalRequest/rentalRequest.route";
 import { adminRoutes } from "./modules/admin/admin.route";
 import {  reviewsRoutes } from "./modules/reviews/reviews.route";
+import { paymentRoutes } from "./modules/payment/payment.route";
 
 const app: Application = express();
 //cors setup
@@ -54,7 +55,8 @@ app.use("/api/admin",adminRoutes)
 //reviews realted
 app.use("/api/reviews",reviewsRoutes)
 
-
+//payment related
+app.use("/api/payments",paymentRoutes)
 
 
 app.use(notFound)
