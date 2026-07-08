@@ -64,22 +64,27 @@ const verifySslCommerzPayment = catchAsync(
 
 const getUsersPaymentHistory = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    const tenantId=req.user?.id
+    const result=await paymentServices.paymentHistoryFromDb(tenantId as string)
     sendResponse(res, {
-      statusCode: httpsStatus.CREATED,
+      statusCode: httpsStatus.OK,
       success: true,
-      message: "Payment created",
-      data: null,
+      message: "Your all payment history is here",
+      data: result,
     });
   },
 );
 
 const getPaymentDetails = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+        const paymentId=req.params?.id
+            const tenantId=req.user?.id
+    const result=await paymentServices.paymentDetailsFromDb(paymentId as string,tenantId as string)
     sendResponse(res, {
-      statusCode: httpsStatus.CREATED,
+      statusCode: httpsStatus.OK,
       success: true,
-      message: "Payment created",
-      data: null,
+      message: "Your payment details is hrere",
+      data: result,
     });
   },
 );

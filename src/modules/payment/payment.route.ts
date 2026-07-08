@@ -12,7 +12,7 @@ router.post("/create",auth(Role.TENANT),paymentController.createPayment)
 //payment confirm ssl
 router.post("/confirm",paymentController.verifySslCommerzPayment)
 //get payment users history
-router.get("/",paymentController.getUsersPaymentHistory)
+router.get("/",auth(Role.TENANT),paymentController.getUsersPaymentHistory)
 //get payment details
 router.get("/:id",paymentController.getPaymentDetails)
 export const paymentRoutes=router 

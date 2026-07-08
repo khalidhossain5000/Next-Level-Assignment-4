@@ -150,10 +150,35 @@ const verifySslCommerzPayment = async (
 };
 
 //get  users payment history
-const paymentHistoryFromDb = async () => {};
+const paymentHistoryFromDb = async (tenantId:string) => {
+const result=await prisma.payment.findMany({
+  where:{
+    rentalRequest:{
+      tenantId
+    }
+  },
+  include:{
+    rentalRequest:true
+  }
+})
+return result
+};
 
 //get payment details
-const paymentDetailsFromDb = async () => {};
+const paymentDetailsFromDb = async (id:string,tenantId:string) => {
+const result=await prisma.payment.findUniqueOrThrow({
+  where:{
+    id,
+    rentalRequest:{
+      tenantId
+    }
+  },
+  include:{
+    rentalRequest:true
+  }
+})
+return result
+};
 
 export const paymentServices = {
   createPaymentInDb,
