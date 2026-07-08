@@ -1,0 +1,10 @@
+model Payment{
+    id String @id @default(uuid())
+    transactionId String @db.VarChar(500)
+    totalAmount Decimal @db.Decimal(10,2)
+    provider String @db.VarChar(50)
+    paidAt DateTime @default(now())
+    //rental request foreign key to know which request payment is doing
+    rentalRequestId String
+    rentalRequest RentalRequest @relation(fields: [rentalRequestId],references: [id],onDelete: Cascade)
+}
