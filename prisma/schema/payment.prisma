@@ -1,6 +1,6 @@
 model Payment{
     id String @id @default(uuid())
-    transactionId String @db.VarChar(500)
+    transactionId String @unique @db.VarChar(500)
     totalAmount Decimal @db.Decimal(10,2)
     provider String @db.VarChar(50)
     paidAt DateTime @default(now())
