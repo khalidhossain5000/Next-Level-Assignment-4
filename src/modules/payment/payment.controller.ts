@@ -44,7 +44,6 @@ const verifySslCommerzPayment = catchAsync(
       status as string,
       val_id,
     );
-   
 
     if (status === "success") {
       return res.redirect(`${configuration.front_end_Url}/success.html`);
@@ -55,8 +54,6 @@ const verifySslCommerzPayment = catchAsync(
     }
 
     return res.redirect(`${configuration.front_end_Url}/cancel.html`);
-
-    
   },
 );
 
@@ -64,8 +61,10 @@ const verifySslCommerzPayment = catchAsync(
 
 const getUsersPaymentHistory = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const tenantId=req.user?.id
-    const result=await paymentServices.paymentHistoryFromDb(tenantId as string)
+    const tenantId = req.user?.id;
+    const result = await paymentServices.paymentHistoryFromDb(
+      tenantId as string,
+    );
     sendResponse(res, {
       statusCode: httpsStatus.OK,
       success: true,
@@ -77,9 +76,12 @@ const getUsersPaymentHistory = catchAsync(
 
 const getPaymentDetails = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-        const paymentId=req.params?.id
-            const tenantId=req.user?.id
-    const result=await paymentServices.paymentDetailsFromDb(paymentId as string,tenantId as string)
+    const paymentId = req.params?.id;
+    const tenantId = req.user?.id;
+    const result = await paymentServices.paymentDetailsFromDb(
+      paymentId as string,
+      tenantId as string,
+    );
     sendResponse(res, {
       statusCode: httpsStatus.OK,
       success: true,
