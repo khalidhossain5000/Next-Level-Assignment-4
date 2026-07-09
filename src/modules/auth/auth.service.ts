@@ -15,10 +15,11 @@ const createUserInDb = async (payload: IUser) => {
   });
 
   if (user)
-    throw {
-      statusCode: httpStatus.CONFLICT,
-      message: "User Already Exist , Please Login",
-    };
+     throw {
+  statusCode: 409,
+  name: "ConflictError",
+  message: "User Already Exist ,Please Login",
+};
 
   //s-2 hash passowrd
 
@@ -53,11 +54,12 @@ const loginUserInDb = async (email: string, password: string) => {
   });
 
   if (!user)
-    throw {
-      statusCode: httpStatus.NOT_FOUND,
-      message: "User Not Found, Register First",
-    };
-
+   
+  throw {
+  statusCode: httpStatus.NOT_FOUND,
+  name: "Not Found Error",
+   message: "User Not Found, Register First",
+};
   //s-2 user exist now check the password
 
   const isValidPassword = await bcrypt.compare(password, user.password);
@@ -65,6 +67,7 @@ const loginUserInDb = async (email: string, password: string) => {
   if (!isValidPassword)
     throw {
       statusCode: httpStatus.UNAUTHORIZED,
+        name: "Unauthorized",
       message: "Invalid Password Try Again",
     };
 

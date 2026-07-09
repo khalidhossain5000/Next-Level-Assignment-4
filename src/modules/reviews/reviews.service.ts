@@ -1,6 +1,7 @@
 import { RentalRequestStatus } from "../../../generated/prisma/enums";
 import { prisma } from "../../lib/prisma";
 import { IReviews } from "./reviews.interface"
+import httpStatus from "http-status"
 
 const createReviewsInDb=async(payload:IReviews,tenantId:string)=>{
     const {rating,content,propertyId}=payload
@@ -19,17 +20,25 @@ const property=await prisma.properties.findUnique({
     }
 })
 
-if(!property) throw {statusCode:404,message:"property not s found"}
+if(!property)   throw {
+      statusCode: httpStatus.NOT_FOUND,
+        name: "Not found",
+      message: "property not found",
+    };
 
 //need to check if the payment is done and rental is completed
 const completedRental=await prisma.rentalRequest.findFirst({
     where:{
         tenantId,
         propertyId,
-        status:RentalRequestStatus.COMPLETED
+        status:RentalRequestStatus.ACTIVE
     }
 })
-if(!completedRental) throw {statusCode:404,message:"property rent payment not completed yet"}
+if(!completedRental) throw {
+      statusCode: httpStatus.FORBIDDEN,
+        name: "Forbidden",
+      message: "Payment not completed yet pay first",
+    };
 
 //check duplicate review
 
@@ -40,7 +49,11 @@ const existingReview=await prisma.reviews.findFirst({
     }
 })
 
-if(!existingReview) throw {statusCode:409,message:"You already given review"}
+if(!existingReview) throw {
+      statusCode: httpStatus.CONFLICT,
+        name: "CONFLICT",
+      message: "You already given review for this rent",
+    };
 
 
 //now here we can create review

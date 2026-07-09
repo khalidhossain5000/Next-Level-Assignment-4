@@ -8,7 +8,9 @@
   "main": "server.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tsx watch ./src/server.ts"
+    "dev": "tsx watch ./src/server.ts",
+    "start": "node dist/server.js",
+    "build": "prisma generate && tsup"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.10",
@@ -32,6 +34,8 @@
     "express": "^5.2.1",
     "http-status": "^2.1.0",
     "jsonwebtoken": "^9.0.3",
-    "pg": "^8.22.0"
+    "pg": "^8.22.0",
+    "tsup": "^8.5.1",
+    "vercel": "^54.21.1"
   }
 }

@@ -3,16 +3,18 @@
 import axios from "axios";
 import {
   PaymentStatus,
+  PropertyStatus,
   RentalRequestStatus,
 } from "../../../generated/prisma/enums";
 import configuration from "../../config";
 import { prisma } from "../../lib/prisma";
-
+import httpStatus from "http-status"
 const createPaymentInDb = async (payload: any, tenantId: string) => {
   // console.log(tenantId,'tenatn id from paymetn service')
   const transId = `TRNX_ID_${Date.now()}`;
   //data from payload
   const { rentalRequestId } = payload;
+
   //fetch user
   const user = await prisma.user.findUniqueOrThrow({ where: { id: tenantId } });
   //payment will be done if rental request stasus is approved
@@ -22,14 +24,16 @@ const createPaymentInDb = async (payload: any, tenantId: string) => {
   // checking ownership if this reuqst done by logged in user
   if (rentalRequest.tenantId !== tenantId)
     throw {
-      statusCode: 401,
-      message: "You are not allowed to pay for this rental request.",
+      statusCode: httpStatus.FORBIDDEN,
+        name: "Forbidden",
+      message: "You are not allowed to pay for this rental request.Pay your own",
     };
 
   //if rent req approved or not
   if (rentalRequest.status !== RentalRequestStatus.APPROVED)
     throw {
-      statusCode: 401,
+      statusCode: httpStatus.FORBIDDEN,
+        name: "Forbidden",
       message:
         "Rental Request is not approved yet ,contact landlord or support",
     };
@@ -41,7 +45,8 @@ const createPaymentInDb = async (payload: any, tenantId: string) => {
   });
   if (existingPayment)
     throw {
-      statusCode: 409,
+      statusCode: httpStatus.CONFLICT,
+        name: "Conflict error",
       message: "Payment has already been completed for this rental request.",
     };
 
@@ -105,12 +110,15 @@ const verifySslCommerzPayment = async (
   );
 
   const paymentData = response.data;
-  console.log(paymentData, "this is the payment id here");
+
   if (paymentData.status === "VALID") {
     await prisma.$transaction(async (tx) => {
       const payment = await tx.payment.findUniqueOrThrow({
         where: {
           transactionId: transId,
+        },
+        include: {
+          rentalRequest: true,
         },
       });
 
@@ -129,6 +137,17 @@ const verifySslCommerzPayment = async (
         },
         data: {
           status: RentalRequestStatus.ACTIVE,
+        },
+      });
+
+      //set property stasus to booked
+
+      await tx.properties.update({
+        where: {
+          id: payment.rentalRequest.propertyId,
+        },
+        data: {
+          status: PropertyStatus.BOOKED,
         },
       });
     });
@@ -150,34 +169,35 @@ const verifySslCommerzPayment = async (
 };
 
 //get  users payment history
-const paymentHistoryFromDb = async (tenantId:string) => {
-const result=await prisma.payment.findMany({
-  where:{
-    rentalRequest:{
-      tenantId
-    }
-  },
-  include:{
-    rentalRequest:true
-  }
-})
-return result
+const paymentHistoryFromDb = async (tenantId: string) => {
+  const result = await prisma.payment.findMany({
+    where: {
+      rentalRequest: {
+        tenantId,
+      },
+    },
+    include: {
+      rentalRequest: true,
+    },
+  });
+  console.log(result,'this is result')
+  return result;
 };
 
 //get payment details
-const paymentDetailsFromDb = async (id:string,tenantId:string) => {
-const result=await prisma.payment.findUniqueOrThrow({
-  where:{
-    id,
-    rentalRequest:{
-      tenantId
-    }
-  },
-  include:{
-    rentalRequest:true
-  }
-})
-return result
+const paymentDetailsFromDb = async (id: string, tenantId: string) => {
+  const result = await prisma.payment.findUniqueOrThrow({
+    where: {
+      id,
+      rentalRequest: {
+        tenantId,
+      },
+    },
+    include: {
+      rentalRequest: true,
+    },
+  });
+  return result;
 };
 
 export const paymentServices = {

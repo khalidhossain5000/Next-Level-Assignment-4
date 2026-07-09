@@ -1,6 +1,6 @@
 import app from "./app";
 import configuration from "./config";
-import { prisma } from "./lib/prisma";
+
 
 const port = configuration.port;
 

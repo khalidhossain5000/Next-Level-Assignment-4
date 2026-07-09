@@ -36,6 +36,7 @@ const auth = (...requiredRoles: string[]) => {
     if (!token)
       throw {
         statusCode: httpStatus.UNAUTHORIZED,
+          name: "Unauthorised access",
         message: "Invalid Token ,Register or login",
       };
     //s-2 token validation
@@ -47,6 +48,7 @@ const auth = (...requiredRoles: string[]) => {
     if (!verifiedToken.success)
       throw {
         statusCode: httpStatus.UNAUTHORIZED,
+          name: "Unauth access",
         message: verifiedToken.error,
       };
 
@@ -57,7 +59,8 @@ const auth = (...requiredRoles: string[]) => {
     if (!requiredRoles.includes(role))
       throw {
         statusCode: httpStatus.UNAUTHORIZED,
-        message: "You dont have access from cheking role",
+          name: "Unauthorized Access",
+        message: "You dont have access ,contact support for more details",
       };
 
     //s-4 check user in db
@@ -68,7 +71,8 @@ const auth = (...requiredRoles: string[]) => {
 
     if (!user)
       throw {
-        statusCode: httpStatus.UNAUTHORIZED,
+        statusCode: httpStatus.NOT_FOUND,
+          name: "Not Found Error",
         message: "User not found register or login",
       };
 
