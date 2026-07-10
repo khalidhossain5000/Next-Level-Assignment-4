@@ -1,6 +1,6 @@
 import { RentalRequestStatus } from "../../../generated/prisma/enums";
 import { prisma } from "../../lib/prisma";
-import AppError from "../../utils/AppError";
+
 import { IRentalRequest } from "./rentalRequest.interface";
 
 const createRentalRequestInDb = async (
@@ -14,7 +14,7 @@ const createRentalRequestInDb = async (
         tenantId,
         propertyId,
         status: {
-          in: [RentalRequestStatus.PENDING, RentalRequestStatus.APPROVED],
+          in: [RentalRequestStatus.PENDING, RentalRequestStatus.APPROVED,RentalRequestStatus.ACTIVE],
         },
       },
     });
