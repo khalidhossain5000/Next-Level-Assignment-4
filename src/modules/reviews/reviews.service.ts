@@ -49,7 +49,9 @@ const existingReview=await prisma.reviews.findFirst({
     }
 })
 
-if(!existingReview) throw {
+console.log(existingReview,'this is exisitng review')
+
+if(existingReview) throw {
       statusCode: httpStatus.CONFLICT,
         name: "CONFLICT",
       message: "You already given review for this rent",
