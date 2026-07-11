@@ -16,7 +16,7 @@ const result=await reviewsServices.createReviewsInDb(payload,tenantId as string)
       statusCode: httpStatus.OK,
       success: true,
       message: "Reviews created successfully",
-      data: null,
+      data: result,
     });
   },
 );

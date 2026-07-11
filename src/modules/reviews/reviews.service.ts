@@ -49,7 +49,7 @@ const existingReview=await prisma.reviews.findFirst({
     }
 })
 
-console.log(existingReview,'this is exisitng review')
+
 
 if(existingReview) throw {
       statusCode: httpStatus.CONFLICT,
