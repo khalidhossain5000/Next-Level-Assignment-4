@@ -14,16 +14,21 @@ const createRentalRequestInDb = async (
         tenantId,
         propertyId,
         status: {
-          in: [RentalRequestStatus.PENDING, RentalRequestStatus.APPROVED,RentalRequestStatus.ACTIVE],
+          in: [
+            RentalRequestStatus.PENDING,
+            RentalRequestStatus.APPROVED,
+            RentalRequestStatus.ACTIVE,
+          ],
         },
       },
     });
   if (existingRentalRequestForThisTenant)
-  throw {
-  statusCode: 409,
-  name: "ConflictError",
-  message: "You already requested for this property wait for landlord response",
-};
+    throw {
+      statusCode: 409,
+      name: "ConflictError",
+      message:
+        "You already requested for this property wait for landlord response",
+    };
   const result = await prisma.rentalRequest.create({
     data: {
       totalAmount,
@@ -44,38 +49,38 @@ const createRentalRequestInDb = async (
 
 //get current login user rental request
 const getCurrentUserAllRentalRequestFromDb = async (tenantId: string) => {
-   const result=await prisma.rentalRequest.findMany({
-    where:{
-        tenantId
+  const result = await prisma.rentalRequest.findMany({
+    where: {
+      tenantId,
     },
-    include:{
-        property:true,
-        tenant:{
-            omit:{
-                password:true
-            }
-        }
-    }
-   })
-return result
+    include: {
+      property: true,
+      tenant: {
+        omit: {
+          password: true,
+        },
+      },
+    },
+  });
+  return result;
 };
 
 //get rental request details
 const getRentalRequestDetailsFromDb = async (requestId: string) => {
-    const result=await prisma.rentalRequest.findUniqueOrThrow({
-        where:{
-            id:requestId
+  const result = await prisma.rentalRequest.findUniqueOrThrow({
+    where: {
+      id: requestId,
+    },
+    include: {
+      property: true,
+      tenant: {
+        omit: {
+          password: true,
         },
-        include:{
-            property:true,
-            tenant:{
-                omit:{
-                    password:true
-                }
-            }
-        }
-    })
-    return result
+      },
+    },
+  });
+  return result;
 };
 
 export const rentalRequestServices = {
