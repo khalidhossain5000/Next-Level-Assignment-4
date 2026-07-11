@@ -9,11 +9,13 @@ import {
 import configuration from "../../config";
 import { prisma } from "../../lib/prisma";
 import httpStatus from "http-status"
-const createPaymentInDb = async (payload: any, tenantId: string) => {
+
+
+const createPaymentInDb = async (rentalRequestId: string, tenantId: string) => {
   // console.log(tenantId,'tenatn id from paymetn service')
   const transId = `TRNX_ID_${Date.now()}`;
-  //data from payload
-  const { rentalRequestId } = payload;
+
+
 
   //fetch user
   const user = await prisma.user.findUniqueOrThrow({ where: { id: tenantId } });
@@ -54,12 +56,12 @@ const createPaymentInDb = async (payload: any, tenantId: string) => {
   const paymentData = {
     store_id: configuration.ssl_commerz_store_id,
     store_passwd: configuration.ssl_commerz_store_password,
-    total_amount: payload.totalAmount,
+    total_amount: rentalRequest.totalAmount,
     currency: "BDT",
     tran_id: transId,
-    success_url: `${configuration.app_url}/api/payments/confirm?rentalRequestId=${payload.rentalRequestId}&tranId=${transId}&status=success`,
-    fail_url: `${configuration.app_url}/api/payments/confirm?rentalRequestId=${payload.rentalRequestId}&tranId=${transId}&status=fail`,
-    cancel_url: `${configuration.app_url}/api/payments/confirm?rentalRequestId=${payload.rentalRequestId}&tranId=${transId}&status=cancel`,
+    success_url: `${configuration.app_url}/api/payments/confirm?rentalRequestId=${rentalRequestId}&tranId=${transId}&status=success`,
+    fail_url: `${configuration.app_url}/api/payments/confirm?rentalRequestId=${rentalRequestId}&tranId=${transId}&status=fail`,
+    cancel_url: `${configuration.app_url}/api/payments/confirm?rentalRequestId=${rentalRequestId}&tranId=${transId}&status=cancel`,
     cus_name: `${user.firstName} ${user.lastName}`,
     cus_email: user.email,
     cus_add1: "N/A",
@@ -85,7 +87,7 @@ const createPaymentInDb = async (payload: any, tenantId: string) => {
     data: {
       transactionId: transId,
       provider: "SSL_Commerz",
-      totalAmount: payload.totalAmount,
+      totalAmount: rentalRequest.totalAmount,
       status: PaymentStatus.PENDING,
       rentalRequestId,
     },
@@ -100,7 +102,7 @@ const verifySslCommerzPayment = async (
   status: string,
   val_id: string,
 ) => {
-  console.log("service trans id", transId);
+
   const response = await axios.post(
     `https://sandbox.sslcommerz.com/validator/api/validationserverAPI.php?val_id=${val_id}&store_id=${configuration.ssl_commerz_store_id}&store_passwd=${configuration.ssl_commerz_store_password}&format=json
 `,

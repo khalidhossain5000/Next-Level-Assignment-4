@@ -1,4 +1,4 @@
-# RentNest 🏠
+# RentNest
 
 **Find & List Rental Properties with Ease**
 

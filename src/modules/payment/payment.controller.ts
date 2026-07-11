@@ -12,11 +12,11 @@ import configuration from "../../config";
 
 const createPayment = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const payload = req.body;
+    const rentalRequestId = req.body.rentalRequestId;
     // console.log(payload,'this is payload',req.query,'thisis query')
     const tenantId = req.user?.id;
     const result = await paymentServices.createPaymentInDb(
-      payload,
+      rentalRequestId,
       tenantId as string,
     );
     sendResponse(res, {
