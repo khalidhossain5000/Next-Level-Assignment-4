@@ -97,7 +97,6 @@ const createPaymentInDb = async (rentalRequestId: string, tenantId: string) => {
 
 //payment configm and verify payment that the payment is successfully done
 const verifySslCommerzPayment = async (
-  rentalRequestId: string,
   transId: string,
   status: string,
   val_id: string,

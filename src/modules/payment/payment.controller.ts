@@ -39,7 +39,6 @@ const verifySslCommerzPayment = catchAsync(
     // console.log(rentalRequestId,transId,status,'from verify ssl commerz  controller',req.body)
 
     const result = await paymentServices.verifySslCommerzPayment(
-      rentalRequestId as string,
       tranId as string,
       status as string,
       val_id,
